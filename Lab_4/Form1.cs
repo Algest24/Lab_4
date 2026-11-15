@@ -89,5 +89,51 @@ namespace Lab_4
             dataGridView2.DataSource = query;
             dataGridView2.AutoResizeColumns();
         }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            var query = (from p in products
+                         where p.Count < p.DesiredCount
+                         orderby (p.DesiredCount - p.Count) descending
+                         select p).ToList();
+            dataGridView2.DataSource = query;  //привязка данных к таблице dataGridView2
+            dataGridView2.AutoResizeColumns(); //подогнать размер столбцов таблицы под содержимое
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            var query = (from p in products
+                         orderby p.Price descending
+                         select p).Take(5).ToList();
+            dataGridView2.DataSource = query;  //привязка данных к таблице dataGridView2
+            dataGridView2.AutoResizeColumns(); //подогнать размер столбцов таблицы под содержимое
+        }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            var query = (from p in products
+                         group p by p.CategoryName into g
+                         select new
+                         {
+                             Category = g.Key,
+                             AveragePrice = g.Average(x => x.Price),
+                             ProductCount = g.Count()
+                         }).ToList();
+            dataGridView2.DataSource = query;  //привязка данных к таблице dataGridView2
+            dataGridView2.AutoResizeColumns(); //подогнать размер столбцов таблицы под содержимое
+        }
+
+        private void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            var query = (from p in products
+                         select new
+                         {
+                             Наименование = p.ProductName,
+                             Наценка = p.Price - p.Cost,
+                             ОбщаяСтоимость = p.Price * p.Count
+                         }).ToList();
+            dataGridView2.DataSource = query;  //привязка данных к таблице dataGridView2
+            dataGridView2.AutoResizeColumns(); //подогнать размер столбцов таблицы под содержимое
+        }
     }
 }
